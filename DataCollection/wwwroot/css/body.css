@@ -1,0 +1,25 @@
+﻿table.adfstbl td {
+    vertical-align: top;
+    text-align: left;
+    padding: 10px 30px 10px;
+}
+
+input.adfsbutton {
+    color: white;
+    background-color: black;
+}
+
+input.adfsbutton:hover {
+    color: white;
+    background-color: red;
+}
+
+input.dsregbutton {
+    color: white;
+    background-color: black;
+}
+
+input.dsregbutton:hover {
+    color: white;
+    background-color: red;
+}

@@ -1,0 +1,1180 @@
+﻿@using DataCollection.Models
+@model DataCollection.Models.AdfsModel
+
+@{
+    ViewData["Title"] = "Process";
+}
+
+<h2>AD FS 資料採取手順 </h2>
+<br>
+<input type="button" value="COPY" onclick="cp()" class="adfsbutton">
+<br>
+<br>
+
+<!-- ご留意事項 -->
+@{
+    <h5>■ご留意事項<br></h5>
+    <h5>
+        ・今回ご案内させていただきます資料採取は、多くのお客様の環境で採取した実績があり、通常はシステムの運用に影響を与えるものはございません。<br>
+        しかしながら、元々システム リソースが不足している環境などでは影響を及ぼす可能性がございますので、念のため事前に CPU 使用率やメモリ使用量が恒常的に高騰していないこと、ストレージの空き領域が十分に (10 GB 以上) 存在することをご確認ください。<br>
+    </h5>
+    <br>
+
+    if (Model.tgtAdfs is true && Model.tgtWap is true)
+    {
+        <h5>
+            ・AD FS サーバーや WAP サーバーが複数存在する環境では、hosts ファイルでフェデレーション サービス名の名前解決をして接続先のサーバーを固定することで、資料採取のコストを低減することができます。<br>
+            例えば、クライアントの hosts ファイルで接続先の WAP サーバーを固定し、その固定した WAP サーバーの hosts ファイルで接続先の AD FS サーバーを固定することで、資料採取を実施する AD FS サーバー、WAP サーバーをそれぞれ 1 台ずつとすることができます。<br>
+            解析に要する時間の短縮にもなりますので、ぜひご検討をいただければ幸いです。<br>
+        </h5>
+        <br>
+    }
+    else if (Model.tgtAdfs is true && Model.tgtWap is false)
+    {
+        <h5>
+            ・AD FS サーバーが複数存在する環境では、hosts ファイルでフェデレーション サービス名の名前解決をして接続先のサーバーを固定することで、資料採取のコストを低減することができます。<br>
+            例えば、クライアントの hosts ファイルで接続先の AD FS サーバーを固定することで、資料採取を実施する AD FS サーバーを 1 台にすることができます。<br>
+            解析に要する時間の短縮にもなりますので、ぜひご検討をいただければ幸いです。<br>
+        </h5>
+        <br>
+    }
+    else if (Model.tgtAdfs is false && Model.tgtWap is true)
+    {
+        <h5>
+            ・WAP サーバーが複数存在する環境では、hosts ファイルでフェデレーション サービス名の名前解決をして接続先のサーバーを固定することで、資料採取のコストを低減することができます。<br>
+            例えば、クライアントの hosts ファイルで接続先の WAP サーバーを固定することで、資料採取を実施する WAP サーバーを 1 台にすることができます。<br>
+            解析に要する時間の短縮にもなりますので、ぜひご検討をいただければ幸いです。<br>
+        </h5>
+        <br>
+    }
+
+    if (Model.cliFiddler is true)
+    {
+        <h5>
+            ・Fiddler トレースは、HTTPS 通信の内容を確認するためのものであり、入力されたパスワードを確認できる可能性がございます。<br>
+            恐れ入りますが、資料採取時には一時的にパスワードを変更するなどして、資料採取にご協力いただけますと幸いです。<br>
+            いただいた資料は、調査以外の目的には一切利用されません。<br>
+        </h5>
+        <br>
+    }
+    <br>
+    <!-- 情報採取の流れ -->
+
+    <h5>■情報採取の流れ<br></h5>
+    <h5>
+        ここでは、大まかな情報採取の流れをご説明いたします。<br>
+        個々の資料の詳細な取得手順は後述いたしますので、併せてご確認いただけますようお願い申し上げます。<br>
+    </h5>
+    <br>
+
+    // 事前準備
+    if (Model.cliFiddler is true || Model.srvAudit is true)
+    {
+        <h5>・事前準備<br></h5>
+    }
+    // 事前準備 (クライアント側)
+    if (Model.cliFiddler is true)
+    {
+        <h5>[事前準備 (クライアント側)] の手順を実施します。</h5>
+    }
+
+    // 事前準備 (サーバー側)
+    if (Model.srvAudit is true || (Model.cliFiddler is true && Model.tgtAdfs is true && Model.tgtWap is false))
+    {
+        <h5>[事前準備 (サーバー側)] の手順を実施します。</h5>
+    }
+    <br>
+
+    // 資料採取
+    <h5>・資料採取<br></h5>
+    int i_outline = 0;
+    int i_label = 0;
+    string label = "";
+    var getAlphabetByDataTypeMap = new Dictionary<string, string>();
+    var getDataTypeByAlphabetMap = new SortedDictionary<string, string>();
+
+    // クライアント資料取得開始
+    if (Model.cliCert is true)
+    {
+        i_outline++;
+        if (!getAlphabetByDataTypeMap.ContainsKey(Constants.Adfs.LabelCert))
+        {
+            i_label++;
+            label = getLabelFromIndex(i_label);
+            getAlphabetByDataTypeMap.Add(Constants.Adfs.LabelCert, label);
+            getDataTypeByAlphabetMap.Add(label, Constants.Adfs.LabelCert);
+        }
+        else
+        {
+            label = getAlphabetByDataTypeMap[Constants.Adfs.LabelCert];
+        }
+        <h5>@i_outline. クライアント端末で、「@label CAPI2 ログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+    }
+    if (Model.cliSch is true)
+    {
+        i_outline++;
+        if (!getAlphabetByDataTypeMap.ContainsKey(Constants.Adfs.LabelSch))
+        {
+            i_label++;
+            label = getLabelFromIndex(i_label);
+            getAlphabetByDataTypeMap.Add(Constants.Adfs.LabelSch, label);
+            getDataTypeByAlphabetMap.Add(label, Constants.Adfs.LabelSch);
+        }
+        else
+        {
+            label = getAlphabetByDataTypeMap[Constants.Adfs.LabelSch];
+        }
+        <h5>@i_outline. クライアント端末で、「@label Schannel トレース」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+    }
+    if (Model.cliKerb is true)
+    {
+        i_outline++;
+        if (!getAlphabetByDataTypeMap.ContainsKey(Constants.Adfs.LabelKerb))
+        {
+            i_label++;
+            label = getLabelFromIndex(i_label);
+            getAlphabetByDataTypeMap.Add(Constants.Adfs.LabelKerb, label);
+            getDataTypeByAlphabetMap.Add(label, Constants.Adfs.LabelKerb);
+        }
+        else
+        {
+            label = getAlphabetByDataTypeMap[Constants.Adfs.LabelKerb];
+        }
+        <h5>@i_outline. クライアント端末で、「@label Kerberos デバッグログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+    }
+    if (Model.cliNetlog is true)
+    {
+        i_outline++;
+        if (!getAlphabetByDataTypeMap.ContainsKey(Constants.Adfs.LabelNetlog))
+        {
+            i_label++;
+            label = getLabelFromIndex(i_label);
+            getAlphabetByDataTypeMap.Add(Constants.Adfs.LabelNetlog, label);
+            getDataTypeByAlphabetMap.Add(label, Constants.Adfs.LabelNetlog);
+        }
+        else
+        {
+            label = getAlphabetByDataTypeMap[Constants.Adfs.LabelNetlog];
+        }
+        <h5>@i_outline. クライアント端末で、「@label Netlogon デバッグログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+    }
+    if (Model.cliFiddler is true)
+    {
+        i_outline++;
+        if (!getAlphabetByDataTypeMap.ContainsKey(Constants.Adfs.LabelFiddler))
+        {
+            i_label++;
+            label = getLabelFromIndex(i_label);
+            getAlphabetByDataTypeMap.Add(Constants.Adfs.LabelFiddler, label);
+            getDataTypeByAlphabetMap.Add(label, Constants.Adfs.LabelFiddler);
+        }
+        else
+        {
+            label = getAlphabetByDataTypeMap[Constants.Adfs.LabelFiddler];
+        }
+        <h5>@i_outline. クライアント端末で、「@label Fiddler トレース」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+    }
+    if (Model.cliNetmon is true)
+    {
+        i_outline++;
+        if (!getAlphabetByDataTypeMap.ContainsKey(Constants.Adfs.LabelNetmon))
+        {
+            i_label++;
+            label = getLabelFromIndex(i_label);
+            getAlphabetByDataTypeMap.Add(Constants.Adfs.LabelNetmon, label);
+            getDataTypeByAlphabetMap.Add(label, Constants.Adfs.LabelNetmon);
+        }
+        else
+        {
+            label = getAlphabetByDataTypeMap[Constants.Adfs.LabelNetmon];
+        }
+        <h5>@i_outline. クライアント端末で、「@label ネットワーク トレース」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+    }
+    if (Model.cliPsr is true)
+    {
+        i_outline++;
+
+        if (!getAlphabetByDataTypeMap.ContainsKey(Constants.Adfs.LabelPsr))
+        {
+            i_label++;
+            label = getLabelFromIndex(i_label);
+            getAlphabetByDataTypeMap.Add(Constants.Adfs.LabelPsr, label);
+            getDataTypeByAlphabetMap.Add(label, Constants.Adfs.LabelPsr);
+        }
+        else
+        {
+            label = getAlphabetByDataTypeMap[Constants.Adfs.LabelPsr];
+        }
+
+        <h5>@i_outline. クライアント端末で、「@label PSR」 の取得を開始し、事象の再現前まで手順を進めます。</h5>
+    }
+
+    // サーバー資料取得開始
+    if (Model.srvCert is true)
+    {
+        i_outline++;
+        if (!getAlphabetByDataTypeMap.ContainsKey(Constants.Adfs.LabelCert))
+        {
+            i_label++;
+            label = getLabelFromIndex(i_label);
+            getAlphabetByDataTypeMap.Add(Constants.Adfs.LabelCert, label);
+            getDataTypeByAlphabetMap.Add(label, Constants.Adfs.LabelCert);
+        }
+        else
+        {
+            label = getAlphabetByDataTypeMap[Constants.Adfs.LabelCert];
+        }
+
+        if (Model.tgtAdfs is true && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび  WAP サーバーで、「@label CAPI2 ログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        }
+        else if (Model.tgtAdfs is true && Model.tgtWap is false)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label CAPI2 ログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        }
+        else if (Model.tgtAdfs is false && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label CAPI2 ログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        }
+    }
+    if (Model.srvSch is true)
+    {
+        i_outline++;
+        if (!getAlphabetByDataTypeMap.ContainsKey(Constants.Adfs.LabelSch))
+        {
+            i_label++;
+            label = getLabelFromIndex(i_label);
+            getAlphabetByDataTypeMap.Add(Constants.Adfs.LabelSch, label);
+            getDataTypeByAlphabetMap.Add(label, Constants.Adfs.LabelSch);
+        }
+        else
+        {
+            label = getAlphabetByDataTypeMap[Constants.Adfs.LabelSch];
+        }
+
+        if (Model.tgtAdfs is true && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび  WAP サーバーで、「@label Schannel トレース」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        }
+        else if (Model.tgtAdfs is true && Model.tgtWap is false)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label Schannel トレース」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        }
+        else if (Model.tgtAdfs is false && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label Schannel トレース」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        }
+
+    }
+    if (Model.srvKerb is true)
+    {
+        i_outline++;
+        if (!getAlphabetByDataTypeMap.ContainsKey(Constants.Adfs.LabelKerb))
+        {
+            i_label++;
+            label = getLabelFromIndex(i_label);
+            getAlphabetByDataTypeMap.Add(Constants.Adfs.LabelKerb, label);
+            getDataTypeByAlphabetMap.Add(label, Constants.Adfs.LabelKerb);
+        }
+        else
+        {
+            label = getAlphabetByDataTypeMap[Constants.Adfs.LabelKerb];
+        }
+
+        if (Model.tgtAdfs is true && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label Kerberos デバッグログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        }
+        else if (Model.tgtAdfs is true && Model.tgtWap is false)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label Kerberos デバッグログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        }
+        else if (Model.tgtAdfs is false && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label Kerberos デバッグログの取得を開始し、事象の再現前まで手順を進めます。</h5>
+        }
+    }
+    if (Model.srvNetlog is true)
+    {
+        i_outline++;
+        if (!getAlphabetByDataTypeMap.ContainsKey(Constants.Adfs.LabelNetlog))
+        {
+            i_label++;
+            label = getLabelFromIndex(i_label);
+            getAlphabetByDataTypeMap.Add(Constants.Adfs.LabelNetlog, label);
+            getDataTypeByAlphabetMap.Add(label, Constants.Adfs.LabelNetlog);
+
+        }
+        else
+        {
+            label = getAlphabetByDataTypeMap[Constants.Adfs.LabelNetlog];
+        }
+
+        if (Model.tgtAdfs is true && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label Netlogon デバッグログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        }
+        else if (Model.tgtAdfs is true && Model.tgtWap is false)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label Netlogon デバッグログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        }
+        else if (Model.tgtAdfs is false && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label Netlogon デバッグログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        }
+    }
+    if (Model.srvNetmon is true)
+    {
+        i_outline++;
+        if (!getAlphabetByDataTypeMap.ContainsKey(Constants.Adfs.LabelNetmon))
+        {
+            i_label++;
+            label = getLabelFromIndex(i_label);
+            getAlphabetByDataTypeMap.Add(Constants.Adfs.LabelNetmon, label);
+            getDataTypeByAlphabetMap.Add(label, Constants.Adfs.LabelNetmon);
+
+        }
+        else
+        {
+            label = getAlphabetByDataTypeMap[Constants.Adfs.LabelNetmon];
+        }
+
+        if (Model.tgtAdfs is true && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label ネットワーク トレース」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        }
+        else if (Model.tgtAdfs is true && Model.tgtWap is false)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label ネットワーク トレース」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        }
+        else if (Model.tgtAdfs is false && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label ネットワーク トレース」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        }
+    }
+    if (Model.srvDebug is true)
+    {
+        i_outline++;
+        if (!getAlphabetByDataTypeMap.ContainsKey(Constants.Adfs.LabelDebug))
+        {
+            i_label++;
+            label = getLabelFromIndex(i_label);
+            getAlphabetByDataTypeMap.Add(Constants.Adfs.LabelDebug, label);
+            getDataTypeByAlphabetMap.Add(label, Constants.Adfs.LabelDebug);
+
+        }
+        else
+        {
+            label = getAlphabetByDataTypeMap[Constants.Adfs.LabelDebug];
+        }
+
+        if (Model.tgtAdfs is true && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label AD FS デバッグログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        }
+        else if (Model.tgtAdfs is true && Model.tgtWap is false)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label AD FS デバッグログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        }
+        else if (Model.tgtAdfs is false && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label AD FS デバッグログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        }
+    }
+
+    // 事象の再現
+    i_outline++;
+    <br>
+    <h5>@i_outline. クライアント端末で、ブラウザやアプリを起動して、事象を再現します。(もしブラウザやアプリがすでに起動していた場合、一度終了し、起動し直してから事象を再現します。)</h5>
+    <br>
+
+    // サーバー資料取得完了
+    if (Model.srvDebug is true)
+    {
+        i_outline++;
+        label = getAlphabetByDataTypeMap[Constants.Adfs.LabelDebug];
+
+        if (Model.tgtAdfs is true && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label AD FS デバッグログ」の取得を完了します。</h5>
+        }
+        else if (Model.tgtAdfs is true && Model.tgtWap is false)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label AD FS デバッグログ」の取得を完了します。</h5>
+        }
+        else if (Model.tgtAdfs is false && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label AD FS デバッグログ」の取得を完了します。</h5>
+        }
+    }
+    if (Model.srvNetmon is true)
+    {
+        i_outline++;
+        label = getAlphabetByDataTypeMap[Constants.Adfs.LabelNetmon];
+
+        if (Model.tgtAdfs is true && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label ネットワーク トレース」の取得を完了し、資料の採取を行います。</h5>
+        }
+        else if (Model.tgtAdfs is true && Model.tgtWap is false)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label ネットワーク トレース」の取得を完了し、資料の採取を行います。</h5>
+        }
+        else if (Model.tgtAdfs is false && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label ネットワーク トレース」の取得を完了し、資料の採取を行います。</h5>
+        }
+    }
+    if (Model.srvNetlog is true)
+    {
+        i_outline++;
+        label = getAlphabetByDataTypeMap[Constants.Adfs.LabelNetlog];
+
+        if (Model.tgtAdfs is true && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label Netlogon デバッグログ」の取得を完了し、資料の採取を行います。</h5>
+        }
+        else if (Model.tgtAdfs is true && Model.tgtWap is false)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label Netlogon デバッグログ」の取得を完了し、資料の採取を行います。</h5>
+        }
+        else if (Model.tgtAdfs is false && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label Netlogon デバッグログ」の取得を完了し、資料の採取を行います。</h5>
+        }
+    }
+    if (Model.srvKerb is true)
+    {
+        i_outline++;
+        label = getAlphabetByDataTypeMap[Constants.Adfs.LabelKerb];
+
+        if (Model.tgtAdfs is true && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label Kerberos デバッグログの取得を完了し、資料の採取を行います。</h5>
+        }
+        else if (Model.tgtAdfs is true && Model.tgtWap is false)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label Kerberos デバッグログ」の取得を完了し、資料の採取を行います。</h5>
+        }
+        else if (Model.tgtAdfs is false && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label Kerberos デバッグログ」の取得を完了し、資料の採取を行います。</h5>
+        }
+    }
+    if (Model.srvSch is true)
+    {
+        i_outline++;
+        label = getAlphabetByDataTypeMap[Constants.Adfs.LabelSch];
+
+        if (Model.tgtAdfs is true && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび  WAP サーバーで、「@label Schannel トレース」の取得を完了し、資料の採取を行います。</h5>
+        }
+        else if (Model.tgtAdfs is true && Model.tgtWap is false)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label Schannel トレース」の取得を完了し、資料の採取を行います。</h5>
+        }
+        else if (Model.tgtAdfs is false && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label Schannel トレース」の取得を完了し、資料の採取を行います。</h5>
+        }
+
+    }
+
+    // サーバーのスクリプトによる情報採取
+    if (Model.tgtAdfs is true || Model.tgtWap is true)
+    {
+        i_outline++;
+
+        // 再現前の手順には存在せず最後に採取するので、ラベルを新しく取得してセット
+        i_label++;
+        label = getLabelFromIndex(i_label);
+        getAlphabetByDataTypeMap.Add(Constants.Adfs.LabelScript, label);
+        getDataTypeByAlphabetMap.Add(label, Constants.Adfs.LabelScript);
+
+        if (Model.tgtAdfs is true && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび  WAP サーバーで、「@label スクリプトによる情報採取」を行います。</h5>
+        }
+        else if (Model.tgtAdfs is true && Model.tgtWap is false)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label スクリプトによる情報採取」を行います。</h5>
+        }
+        else if (Model.tgtAdfs is false && Model.tgtWap is true)
+        {
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label スクリプトによる情報採取」を行います。</h5>
+        }
+    }
+
+
+    // クライアント資料取得完了
+    if (Model.cliPsr is true)
+    {
+        i_outline++;
+        label = getAlphabetByDataTypeMap[Constants.Adfs.LabelPsr];
+        <h5>@i_outline. クライアント端末で、「@label PSR」の取得を完了し、資料の採取を行います。</h5>
+    }
+    if (Model.cliNetmon is true)
+    {
+        i_outline++;
+        label = getAlphabetByDataTypeMap[Constants.Adfs.LabelNetmon];
+        <h5>@i_outline. クライアント端末で、「@label ネットワーク トレース」の取得を完了し、資料の採取を行います。</h5>
+    }
+    if (Model.cliFiddler is true)
+    {
+        i_outline++;
+        label = getAlphabetByDataTypeMap[Constants.Adfs.LabelFiddler];
+        <h5>@i_outline. クライアント端末で、「@label Fidder トレース」の取得を完了し、資料の採取を行います。</h5>
+    }
+    if (Model.cliNetlog is true)
+    {
+        i_outline++;
+        label = getAlphabetByDataTypeMap[Constants.Adfs.LabelNetlog];
+        <h5>@i_outline. クライアント端末で、「@label Netlogon デバッグログ」の取得を完了し、資料の採取を行います。</h5>
+    }
+    if (Model.cliKerb is true)
+    {
+        i_outline++;
+        label = getAlphabetByDataTypeMap[Constants.Adfs.LabelKerb];
+        <h5>@i_outline. クライアント端末で、「@label Kerberos デバッグログ」の取得を完了し、資料の採取を行います。</h5>
+    }
+    if (Model.cliSch is true)
+    {
+        i_outline++;
+        label = getAlphabetByDataTypeMap[Constants.Adfs.LabelSch];
+        <h5>@i_outline. クライアント端末で、「@label Schannel トレース」の取得を完了し、資料の採取を行います。</h5>
+    }
+
+    // 証明書の情報はスクリプトで取得するので、サーバー側でスクリプトによる採取を実施しているかどうかを確認する必要がある
+    if (Model.cliCert is true)
+    {
+        i_outline++;
+        if (!getAlphabetByDataTypeMap.ContainsKey(Constants.Adfs.LabelScript))
+        {
+            i_label++;
+            label = getLabelFromIndex(i_label);
+            getAlphabetByDataTypeMap.Add(Constants.Adfs.LabelScript, label);
+            getDataTypeByAlphabetMap.Add(label, Constants.Adfs.LabelScript);
+        }
+        else
+        {
+            label = getAlphabetByDataTypeMap[Constants.Adfs.LabelScript];
+        }
+        <h5>@i_outline. クライアント端末で、「@label スクリプトによる情報採取」の取得を完了し、資料の採取を行います。</h5>
+    }
+    <br>
+
+
+    // 事後処理
+    if (Model.cliFiddler is true || Model.srvAudit is true)
+    {
+        <h5>・事後処理<br></h5>
+    }
+    // 事後処理 (クライアント側)
+    if (Model.cliFiddler is true)
+    {
+        i_outline++;
+        <h5>[事後処理 (クライアント側)] の手順を実施します。</h5>
+    }
+
+    // 事後処理 (サーバー側)
+    if (Model.srvAudit is true || (Model.cliFiddler is true && Model.tgtAdfs is true && Model.tgtWap is false))
+    {
+        i_outline++;
+        <h5>[事後処理 (サーバー側)] の手順を実施します。</h5>
+    }
+    <br>
+    <br>
+
+    // 事前準備
+    if (Model.cliFiddler is true || Model.srvAudit is true)
+    {
+        <h5>■ 事前準備<br></h5>
+    }
+
+    <!-- 事前準備 (クライアント側)-->
+    if (Model.cliFiddler is true)
+    {
+        <h5>[事前準備 (クライアント側)]<br></h5>
+        <h5>Fiddler トレースを採取するために、クライアント端末に以下の手順で Fiddler をインストールします。</h5>
+        <br>
+        <h5>1. https://www.telerik.com/download/fiddler  にアクセスします。</h5>
+        <h5>2. 任意に情報を入力し、[Download for Windows] をクリックします。</h5>
+        <h5>3. FiddlerSetup.exe を任意の場所にダウンロードします。</h5>
+        <h5>4. ダウンロードした FiddlerSetup.exe をダブルクリックし、インストールウィザードを進めます。([I Agree]、[Install] を選択します。)</h5>
+        <h5>5. インストールが完了いたしましたら、ブラウザとインストールウィザードを終了します。</h5>
+        <h5>6. [スタート] などから、Fiddler 4 を起動します。</h5>
+        <h5>7. 警告ダイアログが出力される場合がありますが、キャンセルをクリックします。</h5>
+        <h5>8. 起動後から、トラフィックのキャプチャが開始されています。[File] - [Capture Traffic] のチェックを外し、一旦キャプチャを停止します。</h5>
+        <h5>9. [Tools] - [Option] を開き、HTTPS タブを選択します。</h5>
+        <h5>10. Decrypt HTTPS traffic にチェックを入れます。ダイアログが表示されましたら、[Yes]、[はい] をクリックします。</h5>
+        <h5>11. Ignore server certificate errors にチェックを入れます。</h5>
+        <h5>12. OK をクリックし、キャプチャの準備は完了です。</h5>
+        <br>
+        <h5>
+            ※ 以前に Fiddler をインストールしたことがある場合、あるいはすでに Fiddler がインストールされている場合には、[Tools] - [Option] を開き、HTTPS タブを選択して、[Reset All Certificate] から一度証明書を更新してください。<br>
+            途中で表示されるダイアログでは、すべて [OK] または [はい] を選択します。<br>
+            証明書を更新後、Decrypt HTTPS traffic、および Ignore server certificate errors にチェックを入れてください。
+        </h5>
+        <br>
+        <br>
+    }
+
+    <!-- 事前準備 (サーバー側)-->
+    if (Model.srvAudit is true || (Model.cliFiddler is true && Model.tgtAdfs is true && Model.tgtWap is false))
+    {
+        <h5>[事前準備 (サーバー側)]<br></h5>
+
+        int i_prepare = 1;
+
+        if (Model.srvAudit is true)
+        {
+            <h5>最初に、プライマリ AD FS サーバーのみで、以下の手順を実施してください。</h5>
+            <br>
+            <h5>@i_prepare. [AD FS の管理] コンソールを開きます。</h5>
+
+            i_prepare++;
+            <h5>@i_prepare. 左側より、[AD FS] - [サービス] を右クリックし、[フェデレーション サービスのプロパティの編集] を選択します。</h5>
+
+            i_prepare++;
+            <h5>@i_prepare. [イベント] タブに移動し、すべてにチェックを入れます。</h5>
+
+            i_prepare++;
+            <h5>@i_prepare. [OK] をクリックし、画面を閉じます。</h5>
+
+            // WS2016 or later の場合
+            if (!Model.os.Equals(Constants.Adfs.OsWs12r2))
+            {
+                i_prepare++;
+                <h5>@i_prepare. 管理者権限で PowerShell を開き、以下を実行します。</h5>
+                <br>
+                <h5>&nbsp;&nbsp;&nbsp;&nbsp;Set-AdfsProperties -AuditLevel Verbose</h5>
+            }
+
+            if (Model.cliFiddler is true && Model.tgtAdfs is true && Model.tgtWap is false)
+            {
+                i_prepare++;
+                <h5>@i_prepare. 管理者権限で PowerShell を開き、以下を実行します。</h5>
+                <br>
+                <h5>&nbsp;&nbsp;&nbsp;&nbsp;Get-AdfsProperties | select ExtendedProtectionTokenCheck</h5>
+                <br>
+                i_prepare++;
+                <h5>@i_prepare. 現在の ExtendedProtectionTokenCheck の値 (既定値は Allow) を確認します。(事後処理で、元に戻す際に使用いたします。)</h5>
+
+                i_prepare++;
+                <h5>@i_prepare. 続けて以下のコマンドを実行します。 </h5>
+                <br>
+                <h5>&nbsp;&nbsp;&nbsp;&nbsp;Set-AdfsProperties -ExtendedProtectionTokenCheck None</h5>
+            }
+            <br>
+            if (Model.tgtAdfs is true && Model.tgtWap is true)
+            {
+                <h5>続いて、接続される可能性のあるすべての AD FS サーバー、および WAP サーバーで、以下の手順を実施してください。</h5>
+            }
+            else if (Model.tgtAdfs is true && Model.tgtWap is false)
+            {
+                <h5>続いて、接続される可能性のあるすべての AD FS サーバーで、以下の手順を実施してください。</h5>
+            }
+            else if (Model.tgtAdfs is false && Model.tgtWap is true)
+            {
+                <h5>続いて、接続される可能性のあるすべての WAP サーバーで、以下の手順を実施してください。</h5>
+            }
+            <br>
+
+            i_prepare = 1;
+
+            <h5>@i_prepare. [ファイル名を指定して実行] から、gpedit.msc と入力し、ローカル グループ ポリシーを開きます。</h5>
+
+            i_prepare++;
+            <h5>@i_prepare. [コンピューターの構成] - [Windows の設定] - [セキュリティの設定] - [ローカル ポリシー] - [ユーザー権利の割り当て] を展開します。</h5>
+
+            i_prepare++;
+            if (Model.tgtAdfs is true && Model.tgtWap is true)
+            {
+                <h5>@i_prepare. AD FS サーバーでは、[セキュリティ監査の生成] に NT SERVICE\adfssrv が登録されていることを確認します。</h5>
+                <h5>&nbsp;&nbsp;&nbsp;また、WAP サーバーでは、[セキュリティ監査の生成] に NETWORK SERVICE が登録されていることを確認します。</h5>
+            }
+            else if (Model.tgtAdfs is true && Model.tgtWap is false)
+            {
+                <h5>@i_prepare. [セキュリティ監査の生成] に NT SERVICE\adfssrv が登録されていることを確認します。</h5>
+            }
+            else if (Model.tgtAdfs is false && Model.tgtWap is true)
+            {
+                <h5>@i_prepare. [セキュリティ監査の生成] に NETWORK SERVICE が登録されていることを確認します。</h5>
+            }
+
+            i_prepare++;
+            <h5>@i_prepare. 管理者権限でコマンド プロンプトを開き、以下を実行します。</h5>
+            <br>
+            <h5>&nbsp;&nbsp;&nbsp;&nbsp;auditpol.exe /set /subcategory:"生成されたアプリケーション" /failure:enable /success:enable</h5>
+            <br>
+            <h5>※ 英語環境では以下のコマンドを実行します。</h5>
+            <br>
+            <h5>&nbsp;&nbsp;&nbsp;&nbsp;auditpol.exe /set /subcategory:"Application Generated" /failure:enable /success:enable</h5>
+            <br>
+
+            if (Model.cliFiddler is true && Model.tgtAdfs is true && Model.tgtWap is false)
+            {
+                i_prepare++;
+                <h5>@i_prepare. [サービス] コンソールから以下のサービスを再起動します。 </h5>
+                <br>
+                <h5>&nbsp;&nbsp;&nbsp;&nbsp;Active Directory Federation Services</h5>
+                <br>
+            }
+        }
+        else if (Model.cliFiddler is true && Model.tgtAdfs is true && Model.tgtWap is false)
+        {
+            <h5>最初に、プライマリ AD FS サーバーのみで、以下の手順を実施してください。</h5>
+            <br>
+            <h5>@i_prepare. 管理者権限で PowerShell を開き、以下を実行します。</h5>
+            <br>
+            <h5>&nbsp;&nbsp;&nbsp;&nbsp;Get-AdfsProperties | select ExtendedProtectionTokenCheck</h5>
+            <br>
+            i_prepare++;
+            <h5>@i_prepare. 現在の ExtendedProtectionTokenCheck の値 (既定値は Allow) を確認します。(事後処理で、元に戻す際に使用いたします。)</h5>
+
+            i_prepare++;
+            <h5>@i_prepare. 続けて以下のコマンドを実行します。 </h5>
+            <br>
+            <h5>&nbsp;&nbsp;&nbsp;&nbsp;Set-AdfsProperties -ExtendedProtectionTokenCheck None</h5>
+            <br>
+            <h5>続いて、接続される可能性のあるすべての AD FS サーバーで、以下の手順を実施してください。</h5>
+            <br>
+            i_prepare++;
+            <h5>@i_prepare. [サービス] コンソールから以下のサービスを再起動します。 </h5>
+            <br>
+            <h5>&nbsp;&nbsp;&nbsp;&nbsp;Active Directory Federation Services</h5>
+        }
+        <br>
+        <br>
+    }
+
+
+
+    <!-- 情報採取手順詳細 -->
+
+    <h5>■各情報採取手順の詳細<br></h5>
+    foreach (KeyValuePair<string, string> kvp in getDataTypeByAlphabetMap)
+    {
+        if (kvp.Value.Equals(Constants.Adfs.LabelCert))
+        {
+            <h5>
+                ================================<br>
+                @kvp.Key CAPI2 ログ<br>
+                ================================<br>
+                - 取得開始手順：<br>
+                1. イベントビューアを開きます。<br>
+                &nbsp;&nbsp;([スタート] - [ファイル名を指定して実行] を順に選択し、eventvwr と入力後、OKボタンをクリックします。)<br>
+                <br>
+                2. 左ペインのツリーを、下記のとおり展開します。<br>
+                &nbsp;&nbsp; [アプリケーションとサービス ログ] - [Micorosoft] - [Windows] - [CAPI2] - [Operational]<br>
+                <br>
+                3. [Operational] を右クリックし、プロパティを開きます。<br>
+                4. プロパティ画面にて、[ログの有効化] にチェックを入れます。<br>
+                5. プロパティ画面にて、[最大ログ サイズ] を、"10240” に変更し、OK ボタンをクリックします。<br>
+                <br>
+                <br>
+                この後事象を再現しますが、他の種類の資料を採取する場合には、先にそちらについても事象の再現前まで手順を進めます。<br>
+                <br>
+                <br>
+                - 取得完了手順：<br>
+                事象の再現が終わりましたら、[アプリケーションとサービスログ] - [Microsoft] - [Windows] - [CAPI2] - [Operational] を選択し、[ログの無効化] を選択します。<br>
+                ログは、スクリプトでまとめて採取されます。<br>
+            </h5>
+            <br>
+            <br>
+        }
+        if (kvp.Value.Equals(Constants.Adfs.LabelSch))
+        {
+            <h5>
+                ================================<br>
+                @kvp.Key Schannel トレース<br>
+                ================================<br>
+                - 取得開始手順:<br>
+                1. コマンドプロンプトを管理者権限で開きます。<br>
+                &nbsp;&nbsp; (管理者権限で開くためには、スタートメニューで "コマンド プロンプト" を右クリックし「管理者として実行」 をクリックします)<br>
+                <br>
+                2. cd コマンドでログファイルを出力したいディレクトリに移動 (例: cd c:\temp) し、以下のコマンドを実行します。<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;logman -start schannel -p {37d2c3cd-c5d4-4587-8531-4696c44244c8} 0x4000ffff 3 -ets<br>
+                <br>
+                3. コマンドを実行したディレクトリに "Schannel.etl" というファイルが生成され、ログ記録が開始されます。<br>
+                <br>
+                <br>
+                この後事象を再現しますが、他の種類の資料を採取する場合には、先にそちらについても事象の再現前まで手順を進めます。<br>
+                <br>
+                <br>
+                - 取得完了手順:<br>
+                1. 上記の取得開始手順を実行したコマンドプロンプトで、以下のコマンドを実行します。<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;logman -stop SChannel -ets<br>
+                <br>
+                2. コマンドを実行したカレント ディレクトリに "Schannel.etl" というファイルが保存されますので、このファイルを採取ください。<br>
+            </h5>
+            <br>
+            <br>
+        }
+        if (kvp.Value.Equals(Constants.Adfs.LabelKerb))
+        {
+            <h5>
+                ================================<br>
+                @kvp.Key Kerberos デバッグログ<br>
+                ================================<br>
+                - 取得開始手順:<br>
+                1. コマンドプロンプトを管理者権限で開きます。<br>
+                &nbsp;&nbsp; (管理者権限で開くためには、スタートメニューで "コマンド プロンプト" を右クリックし「管理者として実行」 をクリックします)<br>
+                <br>
+                2. cd コマンドでログファイルを出力したいディレクトリに移動 (例: cd c:\temp) し、以下のコマンドを実行します。<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;logman -start kerberos -p {6B510852-3583-4e2d-AFFE-A67F9F223438} 0xffffffff 255 -ets<br>
+                <br>
+                3. コマンドを実行したカレント ディレクトリに "Kerberos.etl" というファイルが生成され、ログ記録が開始されます。<br>
+                <br>
+                <br>
+                この後事象を再現しますが、他の種類の資料を採取する場合には、先にそちらについても事象の再現前まで手順を進めます。<br>
+                <br>
+                <br>
+                - 取得完了手順:<br>
+                上記の取得開始手順を実行したコマンドプロンプトで、以下のコマンドを実行します。<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;logman -stop kerberos -ets<br>
+                <br>
+                コマンドを実行したカレント ディレクトリに "Kerberos.etl" というファイルが保存されますので、このファイルを採取ください。<br>
+            </h5>
+            <br>
+            <br>
+        }
+        if (kvp.Value.Equals(Constants.Adfs.LabelNetlog))
+        {
+            <h5>
+                ================================<br>
+                @kvp.Key Netlogon デバッグログ<br>
+                ================================<br>
+                - 取得開始手順:<br>
+                1. コマンドプロンプトを管理者権限で開きます。<br>
+                &nbsp;&nbsp; (管理者権限で開くためには、スタートメニューで "コマンド プロンプト" を右クリックし「管理者として実行」 をクリックします)<br>
+                <br>
+                2. 以下のコマンドを実行します。<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;nltest /dbflag:0x2fffffff<br>
+                <br>
+                <br>
+                この後事象を再現しますが、他の種類の資料を採取する場合には、先にそちらについても事象の再現前まで手順を進めます。<br>
+                <br>
+                <br>
+                - 取得完了手順:<br>
+                上記の取得開始手順を実行したコマンドプロンプトで、以下のコマンドを実行します。<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;nltest /dbflag:0x0<br>
+                <br>
+                %systemroot%\debug フォルダ配下の "netlogon.log" および "netlogon.bak" (存在する場合) を採取ください。<br>
+                <br>
+                ※ %systemroot% は、通常 C:\Windows です。<br>
+            </h5>
+            <br>
+            <br>
+        }
+        if (kvp.Value.Equals(Constants.Adfs.LabelFiddler))
+        {
+            <h5>
+                ================================<br>
+                @kvp.Key Fiddler トレース<br>
+                ================================<br>
+                - 取得開始手順:<br>
+                1. 事前にインストールした Fiddler で、左ペインに表示されている通信の情報をすべて選択し、Delete キーで削除します。<br>
+                2. [File] - [Capture Traffic] にチェックを入れ、通信のキャプチャを開始します。<br>
+                <br>
+                <br>
+                この後事象を再現しますが、他の種類の資料を採取する場合には、先にそちらについても事象の再現前まで手順を進めます。<br>
+                <br>
+                <br>
+                - 取得完了手順:<br>
+                1. [File] - [Capture Traffic] のチェックを外し、通信のキャプチャを停止します。<br>
+                2. [File] - [Save] - [All Sessions] を選択し、ダイアログが表示されましたら (初回のみ表示されます) [はい] をクリックして、任意の場所に .saz ファイルを保存します。<br>
+                3. 保存した .saz ファイルを採取してください。<br>
+            </h5>
+            <br>
+            <br>
+        }
+        if (kvp.Value.Equals(Constants.Adfs.LabelNetmon))
+        {
+            <h5>
+                ================================<br>
+                @kvp.Key ネットワーク トレース<br>
+                ================================<br>
+                - 取得開始手順:<br>
+                1. コマンドプロンプトを管理者権限で開きます。<br>
+                &nbsp;&nbsp; (管理者権限で開くためには、スタートメニューで "コマンド プロンプト" を右クリックし「管理者として実行」 をクリックします)<br>
+                <br>
+                2. 以下のコマンドを実行します。<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;netsh trace start capture=yes maxSize=2000M<br>
+                <br>
+                &nbsp;&nbsp;* 最大で 2GB までパケットをキャプチャします。<br>
+                <br>
+                3. 以下 5 つのコマンドを実行してキャッシュ情報を削除します。 <br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;ipconfig /flushdns<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;nbtstat -R<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;klist purge<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;klist purge -li 0x3e4<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;klist purge -li 0x3e7<br>
+                <br>
+                <br>
+                この後事象を再現しますが、他の種類の資料を採取する場合には、先にそちらについても事象の再現前まで手順を進めます。<br>
+                <br>
+                <br>
+                - 取得完了手順:<br>
+                上記の取得開始手順を実行したコマンドプロンプトで、以下のコマンドを実行します。<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;netsh trace stop<br>
+                <br>
+                トレース ファイルの収集処理が完了しましたら "ファイルの場所" に出力された "NetTrace.etl" 、及び "NetTrace.cab" の 2 つのファイルをご提供下さい。
+            </h5>
+            <br>
+            <br>
+        }
+        if (kvp.Value.Equals(Constants.Adfs.LabelPsr))
+        {
+            <h5>
+                ================================<br>
+                @kvp.Key PSR<br>
+                ================================<br>
+                - 取得開始手順:<br>
+                1. 不要な情報の採取を避けるために、全てのウィンドウを閉じます。<br>
+                2. スタート メニューの [ファイル名を指定して実行] にて psr.exe と入力し、[OK] をクリックします。 <br>
+                3. "問題ステップ記録ツール" が起動しましたら、右端の ▼ をクリックし、表示されるメニューから [設定]をクリックします。 <br>
+                4. "保存する最新の取り込み画像数" を 25 から 100 に変更し、OK をクリックします。 <br>
+                5.  [記録の開始] をクリックします。 <br>
+                6. "問題ステップ記録ツール" の画面を最小化します。 <br>
+                <br>
+                <br>
+                この後事象を再現しますが、他の種類の資料を採取する場合には、先にそちらについても事象の再現前まで手順を進めます。<br>
+                <br>
+                <br>
+                ※ PSR 採取におけるご注意<br>
+                PSR はマウスのクリックのタイミングで各種情報のキャプチャを行います。<br>
+                全ての情報を正しくキャプチャするために、文字入力などが必要な時 (認証情報入力時など) 以外は、マウスでの操作を行うようにしてください。<br>
+                キーボードの Esc キー、Tab キー、Space キー、Enter キー、ショートカット キーなどによる画面操作は行わないでください。<br>
+                これらの操作が行われますと、意図した情報が得られず、再度の採取依頼となる可能性がございます。<br>
+                <br>
+                事象を再現させた後に、最後に画面の何もないところをマウスでクリックします。 <br>
+                ※ 最後の画面も確実に採取するため、必ず一度クリックをして下さい。<br>
+                <br>
+                <br>
+                - 取得完了手順<br>
+                1. "問題ステップ記録ツール" の画面を前面に出します。 <br>
+                2. ファイルの保存場所、ファイル名を指定し、保存致します。 <br>
+                3. 作成されました ZIP ファイルを採取して下さい。<br>
+            </h5>
+            <br>
+            <br>
+        }
+        if (kvp.Value.Equals(Constants.Adfs.LabelDebug))
+        {
+            <h5>
+                ================================<br>
+                @kvp.Key AD FS デバッグログ<br>
+                ================================<br>
+                - 取得開始手順:<br>
+                1. コマンドプロンプトを管理者権限で開きます。<br>
+                &nbsp;&nbsp; (管理者権限で開くためには、スタートメニューで "コマンド プロンプト" を右クリックし「管理者として実行」 をクリックします)<br>
+                <br>
+                2. 次のコマンドを実行し、AD FS デバッグ ログのレベルを設定します。 <br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;wevtutil sl "AD FS Tracing/Debug" /l:5<br>
+                <br>
+                ※ 下記手順  5. が既に有効化されている場合はこのコマンドでエラーが発生します。その場合は、事前に無効にしてからこのコマンドを実施ください。<br>
+                <br>
+                3. [イベント ビューアー] を起動し、[表示] - [分析およびデバッグ ログの表示] にチェックを入れます。<br>
+                4. 左ペインのツリーを、下記のとおり展開します。 <br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;[アプリケーションとサービス ログ] - [AD FS Tracing] - [Debug]<br>
+                <br>
+                5. [Debug] を右クリックし、[ログの有効化] を選択します。<br>
+                <br>
+                <br>
+                この後事象を再現しますが、他の種類の資料を採取する場合には、先にそちらについても事象の再現前まで手順を進めます。<br>
+                <br>
+                <br>
+                - 取得完了手順:<br>
+                資料採取が終わりましたら、[アプリケーションとサービス ログ] - [AD FS Tracing] - [Debug] を選択し、[ログの無効化] を選択します。<br>
+                ログは、スクリプトでまとめて採取されます。<br>
+            </h5>
+            <br>
+            <br>
+        }
+        if (kvp.Value.Equals(Constants.Adfs.LabelScript))
+        {
+            <h5>
+                ================================<br>
+                @kvp.Key スクリプトによる情報採取<br>
+                ================================<br>
+                1. GitHub の下記 URL より getadfslogscript.ps1 をダウンロードします。<br>
+                &nbsp;&nbsp;https://github.com/jpazureid/adfs-diagnostic<br>
+                <br>
+                2. PowerShell プロンプトを管理者として起動し、カレントディレクトリをスクリプトを配置したフォルダーに移動します。<br>
+                ※ Windows PowerShell (x86) と表示されている PowerShell で本スクリプトを実行すると失敗します。 x86 という表記がない PowerShell にて実行ください。<br>
+                <br>
+                3. 下記のように実行します。<br>
+                <br>
+                .\getadfslogscript.ps1<br>
+                <br>
+                4. PowerShell 実行カレント フォルダー上に [実行日時]_hostname でフォルダーが作成され、その配下に各種ログが出力されます。<br>
+                ※ 構成によってはエラーが返ってくる場合もございますが、無視してください。<br>
+                <br>
+                5. 実行完了後、 PowerShell 画面に表示された保存先フォルダーを ZIP 等で圧縮し、弊社までお寄せください<br>
+                <br>
+                ※ スクリプトの実行が許可されていない (Restricted) 場合は、下記コマンドを利用してスクリプトを実行することが可能です。<br>
+                <br>
+                Powershell.exe -ExecutionPolicy RemoteSigned -File .\getadfslogscript.ps1<br>
+            </h5>
+            <br>
+            <br>
+        }
+    }
+
+    // 事後処理
+    if (Model.cliFiddler is true || Model.srvAudit is true)
+    {
+        <h5>■事後処理<br></h5>
+    }
+    // 事後処理 (クライアント側)
+    if (Model.cliFiddler is true)
+    {
+        <h5>
+            [事後処理 (クライアント側)]<br>
+            ・Fiddler のアンインストールを行います。<br>
+            コントロールパネルの [プログラムのアンインストール] から、"Progress Telerik Fiddler" をアンインストールします。<br>
+            ダイアログが表示された場合、「Yes」を選択します。<br>
+            <br>
+            「ファイル名を指定して実行」(Windows + R キー) から、certlm.msc と入力して [OK] をクリックし、ローカル コンピューターの証明書スナップインを表示します。<br>
+            「信頼されたルート証明機関」を開いて、発行者が "DO_NOT_TRUST_FiddlerRoot" である証明書を削除します。<br>
+            <br>
+            同様に、「ファイル名を指定して実行」(Windows + R キー) から、certmgr.msc と入力して [OK] をクリックし、カレントユーザーの証明書スナップインを表示します。<br>
+            「個人」および「信頼されたルート証明機関」を開いて、発行者が "DO_NOT_TRUST_FiddlerRoot" である証明書を削除します。<br>
+        </h5>
+        <br>
+        <br>
+    }
+
+    // 事後処理 (サーバー側)
+    if (Model.srvAudit is true || (Model.cliFiddler is true && Model.tgtAdfs is true && Model.tgtWap is false))
+    {
+        <h5>[事後処理 (サーバー側)]</h5>
+        if (Model.srvAudit is true)
+        {
+            <h5>
+                ・必要に応じて AD FS 監査ログを無効化します。<br>
+                通常運用時から AD FS監査ログを有効化されているお客様は多く、障害などが発生した時に有用なものです。<br>
+                無効化する場合には、それぞれ有効化したサーバーで、コマンドプロンプトを管理者権限で起動し、以下のコマンドを実行してください。<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;auditpol.exe /set /subcategory:"生成されたアプリケーション" /failure:disable /success:disable<br>
+                <br>
+                ※ 英語環境では以下のコマンドを実行します。<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;auditpol.exe /set /subcategory:"Application Generated" /failure:disable /success:disable<br>
+                <br>
+                ※ もし有効化したまま運用される場合には、セキュリティ ログの出力が増加いたしますので、ログサイズやストレージの空き容量についてご留意ください。<br>
+            </h5>
+            <br>
+            <br>
+        }
+        if (Model.cliFiddler is true && Model.tgtAdfs is true && Model.tgtWap is false)
+        {
+            <h5>
+                ・拡張保護機能を元の状態に戻します。<br>
+                事前準備で確認しておいた、元の ExtendedProtectionTokenCheck の値に戻します。<br>
+                最初に、プライマリ AD FS サーバーで、管理者権限で PowerShell を開き、以下のように実行します。<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;Set-AdfsProperties -ExtendedProtectionTokenCheck [元の値(既定値は Allow)]<br>
+                <br>
+                続いて、すべての AD FS サーバーで、[サービス] コンソールから以下のサービスを再起動します。<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;Active Directory Federation Services<br>
+
+            </h5>
+        }
+    }
+    <br>
+
+
+    <h5>@Html.ActionLink("Back to Home", "Index", "DataCollection")</h5>
+
+
+    <!-- 項番からアルファベットのラベルを取得する -->
+    @functions {
+        string getLabelFromIndex(int i)
+        {
+            if (i == 1)
+            {
+                return "(A)";
+            }
+            else if (i == 2)
+            {
+                return "(B)";
+            }
+            else if (i == 3)
+            {
+                return "(C)";
+            }
+            else if (i == 4)
+            {
+                return "(D)";
+            }
+            else if (i == 5)
+            {
+                return "(E)";
+            }
+            else if (i == 6)
+            {
+                return "(F)";
+            }
+            else if (i == 7)
+            {
+                return "(G)";
+            }
+            else if (i == 8)
+            {
+                return "(H)";
+            }
+            else if (i == 9)
+            {
+                return "(I)";
+            }
+            else if (i == 10)
+            {
+                return "(J)";
+            }
+            else if (i == 11)
+            {
+                return "(K)";
+            }
+            else if (i == 12)
+            {
+                return "(L)";
+            }
+            else if (i == 13)
+            {
+                return "(M)";
+            }
+            else if (i == 14)
+            {
+                return "(N)";
+            }
+            else if (i == 15)
+            {
+                return "(O)";
+            }
+            else
+            {
+                return "(X)";
+            }
+        }
+    }
+}
