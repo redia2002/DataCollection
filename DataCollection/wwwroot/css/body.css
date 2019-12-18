@@ -9,17 +9,17 @@ input.adfsbutton {
     background-color: black;
 }
 
-input.adfsbutton:hover {
-    color: white;
-    background-color: red;
-}
+    input.adfsbutton:hover {
+        color: white;
+        background-color: red;
+    }
 
 input.dsregbutton {
     color: white;
     background-color: black;
 }
 
-input.dsregbutton:hover {
-    color: white;
-    background-color: red;
-}
+    input.dsregbutton:hover {
+        color: white;
+        background-color: red;
+    }
