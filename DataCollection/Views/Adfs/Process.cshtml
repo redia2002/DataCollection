@@ -108,7 +108,8 @@
         {
             label = getAlphabetByDataTypeMap[Constants.Adfs.LabelCert];
         }
-        <h5>@i_outline. クライアント端末で、「@label CAPI2 ログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+
+        <h5>@i_outline. クライアント端末で、「@label CAPI2 ログ」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。<</h5>
     }
     if (Model.cliSch is true)
     {
@@ -124,7 +125,7 @@
         {
             label = getAlphabetByDataTypeMap[Constants.Adfs.LabelSch];
         }
-        <h5>@i_outline. クライアント端末で、「@label Schannel トレース」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        <h5>@i_outline. クライアント端末で、「@label Schannel トレース」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
     }
     if (Model.cliKerb is true)
     {
@@ -140,7 +141,7 @@
         {
             label = getAlphabetByDataTypeMap[Constants.Adfs.LabelKerb];
         }
-        <h5>@i_outline. クライアント端末で、「@label Kerberos デバッグログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        <h5>@i_outline. クライアント端末で、「@label Kerberos デバッグログ」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
     }
     if (Model.cliNetlog is true)
     {
@@ -156,7 +157,7 @@
         {
             label = getAlphabetByDataTypeMap[Constants.Adfs.LabelNetlog];
         }
-        <h5>@i_outline. クライアント端末で、「@label Netlogon デバッグログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        <h5>@i_outline. クライアント端末で、「@label Netlogon デバッグログ」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
     }
     if (Model.cliFiddler is true)
     {
@@ -172,7 +173,7 @@
         {
             label = getAlphabetByDataTypeMap[Constants.Adfs.LabelFiddler];
         }
-        <h5>@i_outline. クライアント端末で、「@label Fiddler トレース」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        <h5>@i_outline. クライアント端末で、「@label Fiddler トレース」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
     }
     if (Model.cliNetmon is true)
     {
@@ -188,7 +189,7 @@
         {
             label = getAlphabetByDataTypeMap[Constants.Adfs.LabelNetmon];
         }
-        <h5>@i_outline. クライアント端末で、「@label ネットワーク トレース」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        <h5>@i_outline. クライアント端末で、「@label ネットワーク トレース」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
     }
     if (Model.cliPsr is true)
     {
@@ -206,7 +207,7 @@
             label = getAlphabetByDataTypeMap[Constants.Adfs.LabelPsr];
         }
 
-        <h5>@i_outline. クライアント端末で、「@label PSR」 の取得を開始し、事象の再現前まで手順を進めます。</h5>
+        <h5>@i_outline. クライアント端末で、「@label PSR」 の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
     }
 
     // サーバー資料取得開始
@@ -227,15 +228,15 @@
 
         if (Model.tgtAdfs is true && Model.tgtWap is true)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび  WAP サーバーで、「@label CAPI2 ログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび  WAP サーバーで、「@label CAPI2 ログ」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
         }
         else if (Model.tgtAdfs is true && Model.tgtWap is false)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label CAPI2 ログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label CAPI2 ログ」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
         }
         else if (Model.tgtAdfs is false && Model.tgtWap is true)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label CAPI2 ログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label CAPI2 ログ」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
         }
     }
     if (Model.srvSch is true)
@@ -255,15 +256,15 @@
 
         if (Model.tgtAdfs is true && Model.tgtWap is true)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび  WAP サーバーで、「@label Schannel トレース」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび  WAP サーバーで、「@label Schannel トレース」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
         }
         else if (Model.tgtAdfs is true && Model.tgtWap is false)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label Schannel トレース」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label Schannel トレース」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
         }
         else if (Model.tgtAdfs is false && Model.tgtWap is true)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label Schannel トレース」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label Schannel トレース」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
         }
 
     }
@@ -284,15 +285,15 @@
 
         if (Model.tgtAdfs is true && Model.tgtWap is true)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label Kerberos デバッグログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label Kerberos デバッグログ」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
         }
         else if (Model.tgtAdfs is true && Model.tgtWap is false)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label Kerberos デバッグログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label Kerberos デバッグログ」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
         }
         else if (Model.tgtAdfs is false && Model.tgtWap is true)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label Kerberos デバッグログの取得を開始し、事象の再現前まで手順を進めます。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label Kerberos デバッグログの「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
         }
     }
     if (Model.srvNetlog is true)
@@ -313,15 +314,15 @@
 
         if (Model.tgtAdfs is true && Model.tgtWap is true)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label Netlogon デバッグログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label Netlogon デバッグログ」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
         }
         else if (Model.tgtAdfs is true && Model.tgtWap is false)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label Netlogon デバッグログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label Netlogon デバッグログ」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
         }
         else if (Model.tgtAdfs is false && Model.tgtWap is true)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label Netlogon デバッグログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label Netlogon デバッグログ」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
         }
     }
     if (Model.srvNetmon is true)
@@ -342,15 +343,15 @@
 
         if (Model.tgtAdfs is true && Model.tgtWap is true)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label ネットワーク トレース」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label ネットワーク トレース」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
         }
         else if (Model.tgtAdfs is true && Model.tgtWap is false)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label ネットワーク トレース」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label ネットワーク トレース」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
         }
         else if (Model.tgtAdfs is false && Model.tgtWap is true)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label ネットワーク トレース」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label ネットワーク トレース」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
         }
     }
     if (Model.srvDebug is true)
@@ -371,15 +372,15 @@
 
         if (Model.tgtAdfs is true && Model.tgtWap is true)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label AD FS デバッグログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label AD FS デバッグログ」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
         }
         else if (Model.tgtAdfs is true && Model.tgtWap is false)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label AD FS デバッグログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label AD FS デバッグログ」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
         }
         else if (Model.tgtAdfs is false && Model.tgtWap is true)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label AD FS デバッグログ」の取得を開始し、事象の再現前まで手順を進めます。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label AD FS デバッグログ」の「取得開始手順」を実施し、事象の再現前まで手順を進めます。</h5>
         }
     }
 
@@ -397,15 +398,15 @@
 
         if (Model.tgtAdfs is true && Model.tgtWap is true)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label AD FS デバッグログ」の取得を完了します。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label AD FS デバッグログ」の「取得完了手順」を実施し、資料の採取を行います。</h5>
         }
         else if (Model.tgtAdfs is true && Model.tgtWap is false)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label AD FS デバッグログ」の取得を完了します。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label AD FS デバッグログ」の「取得完了手順」を実施し、資料の採取を行います。</h5>
         }
         else if (Model.tgtAdfs is false && Model.tgtWap is true)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label AD FS デバッグログ」の取得を完了します。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label AD FS デバッグログ」の「取得完了手順」を実施し、資料の採取を行います。</h5>
         }
     }
     if (Model.srvNetmon is true)
@@ -415,15 +416,15 @@
 
         if (Model.tgtAdfs is true && Model.tgtWap is true)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label ネットワーク トレース」の取得を完了し、資料の採取を行います。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label ネットワーク トレース」の「取得完了手順」を実施し、資料の採取を行います。</h5>
         }
         else if (Model.tgtAdfs is true && Model.tgtWap is false)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label ネットワーク トレース」の取得を完了し、資料の採取を行います。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label ネットワーク トレース」の「取得完了手順」を実施し、資料の採取を行います。</h5>
         }
         else if (Model.tgtAdfs is false && Model.tgtWap is true)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label ネットワーク トレース」の取得を完了し、資料の採取を行います。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label ネットワーク トレース」の「取得完了手順」を実施し、資料の採取を行います。</h5>
         }
     }
     if (Model.srvNetlog is true)
@@ -433,15 +434,15 @@
 
         if (Model.tgtAdfs is true && Model.tgtWap is true)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label Netlogon デバッグログ」の取得を完了し、資料の採取を行います。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label Netlogon デバッグログ」の「取得完了手順」を実施し、資料の採取を行います。</h5>
         }
         else if (Model.tgtAdfs is true && Model.tgtWap is false)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label Netlogon デバッグログ」の取得を完了し、資料の採取を行います。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label Netlogon デバッグログ」の「取得完了手順」を実施し、資料の採取を行います。</h5>
         }
         else if (Model.tgtAdfs is false && Model.tgtWap is true)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label Netlogon デバッグログ」の取得を完了し、資料の採取を行います。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label Netlogon デバッグログ」の「取得完了手順」を実施し、資料の採取を行います。</h5>
         }
     }
     if (Model.srvKerb is true)
@@ -451,15 +452,15 @@
 
         if (Model.tgtAdfs is true && Model.tgtWap is true)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label Kerberos デバッグログの取得を完了し、資料の採取を行います。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび WAP サーバーで、「@label Kerberos デバッグログの「取得完了手順」を実施し、資料の採取を行います。</h5>
         }
         else if (Model.tgtAdfs is true && Model.tgtWap is false)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label Kerberos デバッグログ」の取得を完了し、資料の採取を行います。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label Kerberos デバッグログ」の「取得完了手順」を実施し、資料の採取を行います。</h5>
         }
         else if (Model.tgtAdfs is false && Model.tgtWap is true)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label Kerberos デバッグログ」の取得を完了し、資料の採取を行います。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label Kerberos デバッグログ」の「取得完了手順」を実施し、資料の採取を行います。</h5>
         }
     }
     if (Model.srvSch is true)
@@ -469,15 +470,15 @@
 
         if (Model.tgtAdfs is true && Model.tgtWap is true)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび  WAP サーバーで、「@label Schannel トレース」の取得を完了し、資料の採取を行います。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーおよび  WAP サーバーで、「@label Schannel トレース」の「取得完了手順」を実施し、資料の採取を行います。</h5>
         }
         else if (Model.tgtAdfs is true && Model.tgtWap is false)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label Schannel トレース」の取得を完了し、資料の採取を行います。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての AD FS サーバーで、「@label Schannel トレース」の「取得完了手順」を実施し、資料の採取を行います。</h5>
         }
         else if (Model.tgtAdfs is false && Model.tgtWap is true)
         {
-            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label Schannel トレース」の取得を完了し、資料の採取を行います。</h5>
+            <h5>@i_outline. 接続される可能性のあるすべての WAP サーバーで、「@label Schannel トレース」の「取得完了手順」を実施し、資料の採取を行います。</h5>
         }
 
     }
@@ -513,37 +514,37 @@
     {
         i_outline++;
         label = getAlphabetByDataTypeMap[Constants.Adfs.LabelPsr];
-        <h5>@i_outline. クライアント端末で、「@label PSR」の取得を完了し、資料の採取を行います。</h5>
+        <h5>@i_outline. クライアント端末で、「@label PSR」の「取得完了手順」を実施し、資料の採取を行います。</h5>
     }
     if (Model.cliNetmon is true)
     {
         i_outline++;
         label = getAlphabetByDataTypeMap[Constants.Adfs.LabelNetmon];
-        <h5>@i_outline. クライアント端末で、「@label ネットワーク トレース」の取得を完了し、資料の採取を行います。</h5>
+        <h5>@i_outline. クライアント端末で、「@label ネットワーク トレース」の「取得完了手順」を実施し、資料の採取を行います。</h5>
     }
     if (Model.cliFiddler is true)
     {
         i_outline++;
         label = getAlphabetByDataTypeMap[Constants.Adfs.LabelFiddler];
-        <h5>@i_outline. クライアント端末で、「@label Fidder トレース」の取得を完了し、資料の採取を行います。</h5>
+        <h5>@i_outline. クライアント端末で、「@label Fidder トレース」の「取得完了手順」を実施し、資料の採取を行います。</h5>
     }
     if (Model.cliNetlog is true)
     {
         i_outline++;
         label = getAlphabetByDataTypeMap[Constants.Adfs.LabelNetlog];
-        <h5>@i_outline. クライアント端末で、「@label Netlogon デバッグログ」の取得を完了し、資料の採取を行います。</h5>
+        <h5>@i_outline. クライアント端末で、「@label Netlogon デバッグログ」の「取得完了手順」を実施し、資料の採取を行います。</h5>
     }
     if (Model.cliKerb is true)
     {
         i_outline++;
         label = getAlphabetByDataTypeMap[Constants.Adfs.LabelKerb];
-        <h5>@i_outline. クライアント端末で、「@label Kerberos デバッグログ」の取得を完了し、資料の採取を行います。</h5>
+        <h5>@i_outline. クライアント端末で、「@label Kerberos デバッグログ」の「取得完了手順」を実施し、資料の採取を行います。</h5>
     }
     if (Model.cliSch is true)
     {
         i_outline++;
         label = getAlphabetByDataTypeMap[Constants.Adfs.LabelSch];
-        <h5>@i_outline. クライアント端末で、「@label Schannel トレース」の取得を完了し、資料の採取を行います。</h5>
+        <h5>@i_outline. クライアント端末で、「@label Schannel トレース」の「取得完了手順」を実施し、資料の採取を行います。</h5>
     }
 
     // 証明書の情報はスクリプトで取得するので、サーバー側でスクリプトによる採取を実施しているかどうかを確認する必要がある
@@ -561,7 +562,7 @@
         {
             label = getAlphabetByDataTypeMap[Constants.Adfs.LabelScript];
         }
-        <h5>@i_outline. クライアント端末で、「@label スクリプトによる情報採取」の取得を完了し、資料の採取を行います。</h5>
+        <h5>@i_outline. クライアント端末で、「@label スクリプトによる情報採取」の「取得完了手順」を実施し、資料の採取を行います。</h5>
     }
     <br>
 
