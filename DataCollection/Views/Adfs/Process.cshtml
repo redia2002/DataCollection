@@ -1016,24 +1016,24 @@
                 ================================<br>
                 @kvp.Key スクリプトによる情報採取<br>
                 ================================<br>
-                1. GitHub の下記 URL より getadfslogscript.ps1 をダウンロードします。<br>
-                &nbsp;&nbsp;https://github.com/jpazureid/adfs-diagnostic<br>
+                1. GitHub の下記 URL にアクセスし、"Clone or download" から Download ZIP を選択して "adfs-diagnostic-master.zip" をダウンロードします。<br>
+                https://github.com/jpazureid/adfs-diagnostic<br>
                 <br>
-                2. PowerShell プロンプトを管理者として起動し、カレントディレクトリをスクリプトを配置したフォルダーに移動します。<br>
-                ※ Windows PowerShell (x86) と表示されている PowerShell で本スクリプトを実行すると失敗します。 x86 という表記がない PowerShell にて実行ください。<br>
+                2. ダウンロードした ZIP ファイルを展開し、"getadfslogscript.ps1" を任意のディレクトリに配置します。<br>
                 <br>
-                3. 下記のように実行します。<br>
+                3. PowerShell プロンプトを管理者として起動し、カレントディレクトリをスクリプトを配置したフォルダーに移動します。<br>
+                ※ Windows PowerShell (x86) と表示されている PowerShell で本スクリプトを実行すると失敗します。 x86 という表記がない PowerShell を実行してください。<br>
                 <br>
+                4. 下記のように実行します。<br>
                 .\getadfslogscript.ps1<br>
                 <br>
-                4. PowerShell 実行カレント フォルダー上に [実行日時]_hostname でフォルダーが作成され、その配下に各種ログが出力されます。<br>
+                ※ スクリプトの実行が許可されていない (Restricted) 場合は、下記コマンドを利用してスクリプトを実行することが可能です。<br>
+                Powershell.exe -ExecutionPolicy RemoteSigned -File .\getadfslogscript.ps1<br>
+                <br>
+                5. PowerShell 実行カレント フォルダー上に [実行日時]_hostname でフォルダーが作成され、その配下に各種ログが出力されます。<br>
                 ※ 構成によってはエラーが返ってくる場合もございますが、無視してください。<br>
                 <br>
-                5. 実行完了後、 PowerShell 画面に表示された保存先フォルダーを ZIP 等で圧縮し、弊社までお寄せください<br>
-                <br>
-                ※ スクリプトの実行が許可されていない (Restricted) 場合は、下記コマンドを利用してスクリプトを実行することが可能です。<br>
-                <br>
-                Powershell.exe -ExecutionPolicy RemoteSigned -File .\getadfslogscript.ps1<br>
+                6. 実行完了後、 PowerShell 画面に表示された保存先フォルダーを ZIP 等で圧縮し、弊社までお寄せください<br>
             </h5>
             <br>
             <br>
