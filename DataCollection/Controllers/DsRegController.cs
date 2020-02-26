@@ -21,6 +21,14 @@ namespace DataCollection.Controllers
         {
             return View();
         }
+        public IActionResult RunTaskDetail()
+        {
+            return View();
+        }
 
+        public IActionResult LockUnlockDetail()
+        {
+            return View();
+        }
     }
 }

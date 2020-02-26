@@ -651,6 +651,7 @@
                 <h5>@i_prepare. 管理者権限で PowerShell を開き、以下を実行します。</h5>
                 <br>
                 <h5>&nbsp;&nbsp;&nbsp;&nbsp;Set-AdfsProperties -AuditLevel Verbose</h5>
+                <br>
             }
 
             if (Model.cliFiddler is true && Model.tgtAdfs is true && Model.tgtWap is false)
@@ -667,8 +668,8 @@
                 <h5>@i_prepare. 続けて以下のコマンドを実行します。 </h5>
                 <br>
                 <h5>&nbsp;&nbsp;&nbsp;&nbsp;Set-AdfsProperties -ExtendedProtectionTokenCheck None</h5>
+                <br>
             }
-            <br>
             if (Model.tgtAdfs is true && Model.tgtWap is true)
             {
                 <h5>続いて、接続される可能性のあるすべての AD FS サーバー、および WAP サーバーで、以下の手順を実施してください。</h5>
