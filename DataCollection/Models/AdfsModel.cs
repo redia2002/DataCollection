@@ -39,6 +39,11 @@ namespace DataCollection.Models
         public bool srvNetlog { get; set; }
 
 
+        // Target (Clietnt Only / Servers Only)
+        public bool isClientOnly { get; set; }
+        public bool isServersOnly { get; set; }
+
+
         public void initialize()
         {
             // OS
@@ -66,7 +71,29 @@ namespace DataCollection.Models
             srvKerb = false;
             srvNetlog = false;
 
+            setTarget();
+
         }
 
+        public void setTarget()
+        {
+            if ((cliPsr || cliFiddler || cliNetmon || cliSch || cliCert || cliKerb || cliNetlog) && (!tgtAdfs && !tgtWap) )
+            {
+                isClientOnly = true;
+            }
+            else
+            {
+                isClientOnly = false;
+            }
+            
+            if ((tgtAdfs || tgtWap) && (!cliPsr && !cliFiddler && !cliNetmon && !cliSch && !cliCert && !cliKerb && !cliNetlog))
+            {
+                isServersOnly = true;
+            }
+            else
+            {
+                isServersOnly = false;
+            }
+        }
     }
 }

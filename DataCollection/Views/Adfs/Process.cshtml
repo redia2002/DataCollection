@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Process";
+    Model.setTarget();
 }
 
 <h2>AD FS 資料採取手順 </h2>
@@ -71,18 +72,27 @@
     if (Model.cliFiddler is true || Model.srvAudit is true)
     {
         <h5>・事前準備<br></h5>
-    }
-    // 事前準備 (クライアント側)
-    if (Model.cliFiddler is true)
-    {
-        <h5>[事前準備 (クライアント側)] の手順を実施します。</h5>
+
+        if (Model.isClientOnly || Model.isServersOnly)
+        {
+            <h5>[事前準備] の手順を実施します。</h5>
+        }
+        else
+        {
+            // 事前準備 (クライアント側)
+            if (Model.cliFiddler is true)
+            {
+                <h5>[事前準備 (クライアント側)] の手順を実施します。</h5>
+            }
+
+            // 事前準備 (サーバー側)
+            if (Model.srvAudit is true || (Model.cliFiddler is true && Model.tgtAdfs is true && Model.tgtWap is false))
+            {
+                <h5>[事前準備 (サーバー側)] の手順を実施します。</h5>
+            }
+        }
     }
 
-    // 事前準備 (サーバー側)
-    if (Model.srvAudit is true || (Model.cliFiddler is true && Model.tgtAdfs is true && Model.tgtWap is false))
-    {
-        <h5>[事前準備 (サーバー側)] の手順を実施します。</h5>
-    }
     <br>
 
     // 資料採取
@@ -571,33 +581,43 @@
     if (Model.cliFiddler is true || Model.srvAudit is true)
     {
         <h5>・事後処理<br></h5>
-    }
-    // 事後処理 (クライアント側)
-    if (Model.cliFiddler is true)
-    {
-        i_outline++;
-        <h5>[事後処理 (クライアント側)] の手順を実施します。</h5>
+
+        if (Model.isClientOnly || Model.isServersOnly)
+        {
+            <h5>[事後処理] の手順を実施します。</h5>
+        }
+        else
+        {
+            // 事後処理 (クライアント側)
+            if (Model.cliFiddler is true)
+            {
+                <h5>[事後処理 (クライアント側)] の手順を実施します。</h5>
+            }
+
+            // 事後処理 (サーバー側)
+            if (Model.srvAudit is true || (Model.cliFiddler is true && Model.tgtAdfs is true && Model.tgtWap is false))
+            {
+                <h5>[事後処理 (サーバー側)] の手順を実施します。</h5>
+            }
+        }
     }
 
-    // 事後処理 (サーバー側)
-    if (Model.srvAudit is true || (Model.cliFiddler is true && Model.tgtAdfs is true && Model.tgtWap is false))
-    {
-        i_outline++;
-        <h5>[事後処理 (サーバー側)] の手順を実施します。</h5>
-    }
     <br>
     <br>
 
     // 事前準備
     if (Model.cliFiddler is true || Model.srvAudit is true)
     {
-        <h5>■ 事前準備<br></h5>
+        <h5>■事前準備<br></h5>
     }
 
     <!-- 事前準備 (クライアント側)-->
     if (Model.cliFiddler is true)
     {
-        <h5>[事前準備 (クライアント側)]<br></h5>
+        if (Model.isClientOnly is false)
+        {
+            <h5>[事前準備 (クライアント側)]<br></h5>
+        }
         <h5>Fiddler トレースを採取するために、クライアント端末に以下の手順で Fiddler をインストールします。</h5>
         <br>
         <h5>1. https://www.telerik.com/download/fiddler  にアクセスします。</h5>
@@ -623,9 +643,12 @@
     }
 
     <!-- 事前準備 (サーバー側)-->
-    if (Model.srvAudit is true || (Model.cliFiddler is true && Model.tgtAdfs is true && Model.tgtWap is false))
+    if (((Model.tgtAdfs is true || Model.tgtWap is true) && Model.srvAudit is true) || (Model.cliFiddler is true && Model.tgtAdfs is true && Model.tgtWap is false))
     {
-        <h5>[事前準備 (サーバー側)]<br></h5>
+        if (Model.isServersOnly is false)
+        {
+            <h5>[事前準備 (サーバー側)]<br></h5>
+        }
 
         int i_prepare = 1;
 
@@ -651,7 +674,6 @@
                 <h5>@i_prepare. 管理者権限で PowerShell を開き、以下を実行します。</h5>
                 <br>
                 <h5>&nbsp;&nbsp;&nbsp;&nbsp;Set-AdfsProperties -AuditLevel Verbose</h5>
-                <br>
             }
 
             if (Model.cliFiddler is true && Model.tgtAdfs is true && Model.tgtWap is false)
@@ -668,8 +690,8 @@
                 <h5>@i_prepare. 続けて以下のコマンドを実行します。 </h5>
                 <br>
                 <h5>&nbsp;&nbsp;&nbsp;&nbsp;Set-AdfsProperties -ExtendedProtectionTokenCheck None</h5>
-                <br>
             }
+            <br>
             if (Model.tgtAdfs is true && Model.tgtWap is true)
             {
                 <h5>続いて、接続される可能性のあるすべての AD FS サーバー、および WAP サーバーで、以下の手順を実施してください。</h5>
@@ -1049,8 +1071,11 @@
     // 事後処理 (クライアント側)
     if (Model.cliFiddler is true)
     {
+        if (!Model.isClientOnly)
+        {
+            <h5>[事後処理 (クライアント側)]</h5>
+        }
         <h5>
-            [事後処理 (クライアント側)]<br>
             ・Fiddler のアンインストールを行います。<br>
             コントロールパネルの [プログラムのアンインストール] から、"Progress Telerik Fiddler" をアンインストールします。<br>
             ダイアログが表示された場合、「Yes」を選択します。<br>
@@ -1066,9 +1091,13 @@
     }
 
     // 事後処理 (サーバー側)
-    if (Model.srvAudit is true || (Model.cliFiddler is true && Model.tgtAdfs is true && Model.tgtWap is false))
+    if ( ((Model.tgtAdfs is true || Model.tgtWap is true) && Model.srvAudit is true) || (Model.cliFiddler is true && Model.tgtAdfs is true && Model.tgtWap is false))
     {
-        <h5>[事後処理 (サーバー側)]</h5>
+        if (!Model.isServersOnly)
+        {
+            <h5>[事後処理 (サーバー側)]</h5>
+        }
+
         if (Model.srvAudit is true)
         {
             <h5>
@@ -1121,7 +1150,7 @@
     </h5>
     <br>
 
-
+    <h5>@Html.ActionLink("Back", "Index", "Adfs")</h5>
     <h5>@Html.ActionLink("Back to Top", "Index", "DataCollection")</h5>
 
 
