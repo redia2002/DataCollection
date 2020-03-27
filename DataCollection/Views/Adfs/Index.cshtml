@@ -7,72 +7,73 @@
 }
 
 <h2>AD FS Data Collection</h2>
+<h5>@Html.ActionLink("ReadMe", "ReadMe", "Adfs", null, new { target = "_blank" })</h5>
 
 @using (Html.BeginForm())
 {
-    <table class="adfstbl">
-        <tr>
-            <td>
-                <p><h3>OS </h3></p>
-                @Html.Label(Constants.Adfs.LabelWs12r2) @Html.RadioButtonFor(model => model.os, Constants.Adfs.OsWs12r2)
-                <br>
-                @Html.Label(Constants.Adfs.LabelWs16) @Html.RadioButtonFor(model => model.os, Constants.Adfs.OsWs16)
-                <br>
-                @Html.Label(Constants.Adfs.LabelWs19) @Html.RadioButtonFor(model => model.os, Constants.Adfs.OsWs19)
+<table class="adfstbl">
+    <tr>
+        <td>
+            <p><h3>OS </h3></p>
+            @Html.Label(Constants.Adfs.LabelWs12r2) @Html.RadioButtonFor(model => model.os, Constants.Adfs.OsWs12r2)
+            <br>
+            @Html.Label(Constants.Adfs.LabelWs16) @Html.RadioButtonFor(model => model.os, Constants.Adfs.OsWs16)
+            <br>
+            @Html.Label(Constants.Adfs.LabelWs19) @Html.RadioButtonFor(model => model.os, Constants.Adfs.OsWs19)
 
-            </td>
-            <td>
-                <p><h3>Target</h3></p>
-                @Html.Label(Constants.Adfs.LabelAdfs) @Html.CheckBoxFor(model => model.tgtAdfs)
-                <br>
-                @Html.Label(Constants.Adfs.LabelWap) @Html.CheckBoxFor(model => model.tgtWap)
-            </td>
-        </tr>
+        </td>
+        <td>
+            <p><h3>Target</h3></p>
+            @Html.Label(Constants.Adfs.LabelAdfs) @Html.CheckBoxFor(model => model.tgtAdfs)
+            <br>
+            @Html.Label(Constants.Adfs.LabelWap) @Html.CheckBoxFor(model => model.tgtWap)
+        </td>
+    </tr>
 
-        <tr>
-            <td>
-                <p><h3>Client</h3></p>
-                @Html.Label(Constants.Adfs.LabelPsr) @Html.CheckBoxFor(model => model.cliPsr)
-                <br>
-                @Html.Label(Constants.Adfs.LabelFiddler) @Html.CheckBoxFor(model => model.cliFiddler)
-                <br>
-                @Html.Label(Constants.Adfs.LabelNetmon) @Html.CheckBoxFor(model => model.cliNetmon)
-                <br>
-                @Html.Label(Constants.Adfs.LabelCert) @Html.CheckBoxFor(model => model.cliCert)
-                <br>
-                @Html.Label(Constants.Adfs.LabelSch) @Html.CheckBoxFor(model => model.cliSch)
-                <br>
-                @Html.Label(Constants.Adfs.LabelKerb) @Html.CheckBoxFor(model => model.cliKerb)
-                <br>
-                @Html.Label(Constants.Adfs.LabelNetlog) @Html.CheckBoxFor(model => model.cliNetlog)
-            </td>
-            <td>
-                <p><h3>Server</h3></p>
-                @Html.Label(Constants.Adfs.LabelAudit) @Html.CheckBoxFor(model => model.srvAudit)
-                <br>
-                @Html.Label(Constants.Adfs.LabelDebug) @Html.CheckBoxFor(model => model.srvDebug)
-                <br>
-                @Html.Label(Constants.Adfs.LabelNetmon) @Html.CheckBoxFor(model => model.srvNetmon)
-                <br>
-                @Html.Label(Constants.Adfs.LabelCert) @Html.CheckBoxFor(model => model.srvCert)
-                <br>
-                @Html.Label(Constants.Adfs.LabelSch) @Html.CheckBoxFor(model => model.srvSch)
-                <br>
-                @Html.Label(Constants.Adfs.LabelKerb) @Html.CheckBoxFor(model => model.srvKerb)
-                <br>
-                @Html.Label(Constants.Adfs.LabelNetlog) @Html.CheckBoxFor(model => model.srvNetlog)
-            </td>
-        </tr>
-    </table>
-    <br>
-    <input type="submit" formaction=@Url.Action("Process") value="WE ARE REDS!!!" class="adfsbutton">
-    <br>
-    <br>
-    <h4>
-        @Html.ActionLink("WAP の再構成に失敗する場合に取得する資料", "WapReconfig", "Adfs")
-    </h4>
-    <br>
-    <h5>@Html.ActionLink("Back to Top", "Index", "DataCollection")</h5>
+    <tr>
+        <td>
+            <p><h3>Client</h3></p>
+            @Html.Label(Constants.Adfs.LabelPsr) @Html.CheckBoxFor(model => model.cliPsr)
+            <br>
+            @Html.Label(Constants.Adfs.LabelFiddler) @Html.CheckBoxFor(model => model.cliFiddler)
+            <br>
+            @Html.Label(Constants.Adfs.LabelNetmon) @Html.CheckBoxFor(model => model.cliNetmon)
+            <br>
+            @Html.Label(Constants.Adfs.LabelCert) @Html.CheckBoxFor(model => model.cliCert)
+            <br>
+            @Html.Label(Constants.Adfs.LabelSch) @Html.CheckBoxFor(model => model.cliSch)
+            <br>
+            @Html.Label(Constants.Adfs.LabelKerb) @Html.CheckBoxFor(model => model.cliKerb)
+            <br>
+            @Html.Label(Constants.Adfs.LabelNetlog) @Html.CheckBoxFor(model => model.cliNetlog)
+        </td>
+        <td>
+            <p><h3>Server</h3></p>
+            @Html.Label(Constants.Adfs.LabelAudit) @Html.CheckBoxFor(model => model.srvAudit)
+            <br>
+            @Html.Label(Constants.Adfs.LabelDebug) @Html.CheckBoxFor(model => model.srvDebug)
+            <br>
+            @Html.Label(Constants.Adfs.LabelNetmon) @Html.CheckBoxFor(model => model.srvNetmon)
+            <br>
+            @Html.Label(Constants.Adfs.LabelCert) @Html.CheckBoxFor(model => model.srvCert)
+            <br>
+            @Html.Label(Constants.Adfs.LabelSch) @Html.CheckBoxFor(model => model.srvSch)
+            <br>
+            @Html.Label(Constants.Adfs.LabelKerb) @Html.CheckBoxFor(model => model.srvKerb)
+            <br>
+            @Html.Label(Constants.Adfs.LabelNetlog) @Html.CheckBoxFor(model => model.srvNetlog)
+        </td>
+    </tr>
+</table>
+<br>
+<input type="submit" formaction=@Url.Action("Process") value="WE ARE REDS!!!" class="adfsbutton">
+<br>
+<br>
+<h4>
+    @Html.ActionLink("WAP の再構成に失敗する場合に取得する資料", "WapReconfig", "Adfs")
+</h4>
+<br>
+<h5>@Html.ActionLink("Back to Top", "Index", "DataCollection")</h5>
 }
 
 

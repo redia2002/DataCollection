@@ -37,6 +37,9 @@ namespace DataCollection.Controllers
         {
             return View();
         }
-
+        public IActionResult ReadMe()
+        {
+            return View();
+        }
     }
 }

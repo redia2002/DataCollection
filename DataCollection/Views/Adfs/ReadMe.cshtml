@@ -1,0 +1,160 @@
+﻿<h2>情報採取について</h2>
+<br>
+<h3>・各項目の説明<br></h3>
+<h4>[OS]</h4>
+<h5>
+    AD FS / WAP サーバーの OS バージョン (WS 2012 R2、WS 2016、WS 2019) を選択してください。<br>
+</h5>
+<br>
+<h4>[Target]</h4>
+<h5>
+    取得対象のサーバー (AD FS / WAP) を選択してください。<br>
+    例えば、AD FS だけで資料採取する場合は AD FS だけを選択し、WAP サーバーでも資料を採取する場合は両方を選択します。<br>
+    クライアントだけで PSR と Fiddler を採取したい場合などは、両方のチェックを外してください。<br>
+</h5>
+<br>
+<h4>[Client]</h4>
+<h5>
+    クライアント側で採取する資料の種類 (後述) を選択します。
+</h5>
+<br>
+<h4>[Server]</h4>
+<h5>
+    サーバー側 (AD FS / WAP) で採取する資料の種類 (後述) を選択します。
+</h5>
+<br>
+<h3>・資料の種類について<br></h3>
+<h4>[PSR]</h4>
+<h5>
+    クライアントで発生している事象や、お客様の操作を明確に確認するために取得します。スクリーンショットとタイムスタンプが自動的に取得されます。
+</h5>
+<br>
+<h4>[Fiddler ]</h4>
+<h5>
+    HTTPS 通信の内容を確認するために取得します。証明書認証のシナリオでは取得できません。
+</h5>
+<br>
+<h4>[AD FS Audit]</h4>
+<h5>
+    AD FS の監査ログを取得します。AD FS での認証処理やクレームルールの動作を調査する場合に取得します。
+</h5>
+<br>
+<h4>[AD FS Debug]</h4>
+<h5>
+    AD FS のデバッグログを取得します。AD FS 内部の処理で遅延、エラーが発生していそうな場合、また証明書認証のシナリオでも取得します。
+</h5>
+<br>
+<h4>[Network Trace]</h4>
+<h5>
+    ページ遷移が遅延する事象や、エラー画面が AD FS や AAD のものではなく、「ページを表示できません」などの通信エラーが疑われる場合に取得します。<br>
+    また、証明書認証のシナリオでも 49443 ポートへの通信などを確認するために取得します。
+</h5>
+<br>
+<h4>[Certificate]</h4>
+<h5>
+    証明書のチェーン検証や失効確認の動作を確認するために取得します。
+</h5>
+<br>
+<h4>[Schannel]</h4>
+<h5>
+    SSL 接続の動作を確認するために取得します。主に Network Traceを取得して調査した結果、 SSL のレイヤーに問題があることが判明した場合に取得します。
+</h5>
+<br>
+<h4>[Kerberos]</h4>
+<h5>
+    Windows 統合認証 (Kerberos 認証) の問題が疑われる場合に取得します。ほとんどのケースで必要ありません。
+</h5>
+<br>
+<h4>[Netlogon]</h4>
+<h5>
+    Windows 統合認証 (Kerberos 認証) の問題が疑われる場合に取得します。ほとんどのケースで必要ありません。
+</h5>
+<br>
+<h3>・主なシナリオ<br></h3>
+<h4>(1) AD FS のエラー画面 (不明なエラーが発生しました) や、Azure AD のエラー画面 (AADSTSxxxxxx) が表示される場合</h4>
+<h5>
+    非常に多いパターンですが、とりあえず以下を採取すればおおよそのことは分かります。<br>
+    PSR でクライアントの操作内容とタイムスタンプを、Fiddler で HTTPS 通信の内容 (主に認証リクエストのパラメータや認証結果)を、AD FS 監査ログで認証処理やクレームルールの動作を確認します。<br>
+    <br>
+    [Client]<br>
+    ・PSR ・Fiddler<br>
+    <br>
+    [Server]<br>
+    ・AD FS Audit<br>
+    <br>
+</h5>
+<br>
+<h4>(2) AD FS での認証がループする場合</h4>
+<h5>
+    ループのシナリオも多くお問合せがありますが、(1) と同じ資料で OK です。<br>
+    主に Fiddler で AD FS での認証結果と、その認証結果を AAD に送信した後のレスポンス、また Cookie の内容などを確認します。<br>
+    <br>
+    [Client]<br>
+    ・PSR ・Fiddler<br>
+    <br>
+    [Server]<br>
+    ・AD FS Audit<br>
+    <br>
+</h5>
+<br>
+<h4>(3) ページ遷移が遅い、真っ白なページになる、「このページにはアクセスできません」など、AD FS や AAD のエラー画面ではないものが表示される場合</h4>
+<h5>
+    通信の問題が疑われるので、Network Trace を併せて取得します。<br>
+    AD FS の処理がどこまで進んでいるか、認証などは問題ないか、という点も確認するため、AD FS Audit ログも念のため取得しておきます。<br>
+    AD FS に対して接続した後、戻りが遅いという事象の場合には、AD FS サーバー内部での処理遅延も疑われるので、AD FS Debug ログを併せて取得します。<br>
+    <br>
+    [Client]<br>
+    ・PSR ・Fiddler ・Network Trace<br>
+    <br>
+    [Server]<br>
+    ・AD FS Audit ・Network Trace (・AD FS Debug : AD FS の応答が遅い場合)<br>
+    <br>
+</h5>
+<br>
+<h4>(4) 証明書認証をトラブルシュートする場合</h4>
+<h5>
+    <a href="https://jpazureid.github.io/blog/active-directory-federation-service/adfs-cba-ts/" target="_blank">証明書認証のトラブルシューティング</a> の切り分けをしてもらっても事象が抑制されない場合には、以下の情報を取得します。<br>
+    証明書認証の場合、Fiddler は取得できない (Fiddlr が証明書を送るように設定すれば取得できますが、動作が変わるので意味がない) のでご注意ください。<br>
+    証明書のチェーン検証や失効確認などは WDG で対応しているので、詳細な調査が必要な場合には対応をお願いしても良いと思います。<br>
+    <br>
+    [Client]<br>
+    ・PSR ・Network Trace ・Certificate<br>
+    <br>
+    [Server]<br>
+    ・AD FS Audit ・AD FS Debug ・Network Trace ・Certificate<br>
+    <br>
+</h5>
+<br>
+<h4>(5) SSL 接続をトラブルシュートする場合</h4>
+<h5>
+    通信の調査をしていたところ、SSL のレイヤーで問題が発生している場合には、さらに Schannel のトレースを取得して詳細を確認します。<br>
+    (最初から採取をお願いすることは、ほぼありません。)<br>
+    エリア的には WDG になるので、問題を明確にしたうえで調査をお願いしても良いと思います。<br>
+    <br>
+    [Client]<br>
+    ・PSR ・Network Trace ・Certificate ・Schannel<br>
+    <br>
+    [Server]<br>
+    ・Network Trace ・Certificate ・Schannel<br>
+    <br>
+</h5>
+<br>
+<h4>(6) Windows 統合認証をトラブルシュートする場合</h4>
+<h5>
+    認証まわりの調査をしていて、Windows 統合認証 (Kerberos 認証) まわりの問題が疑われる場合には、Kerberos デバッグログや Netlogon ログを採取して調査します。<br>
+    (最初から採取をお願いすることは、ほぼありません。)<br>
+    エリア的には WDG になるので、問題を明確にしたうえで調査をお願いしても良いと思います。<br>
+    <br>
+    [Client]<br>
+    ・PSR ・Network Trace ・Kerberos ・Netlogon<br>
+    <br>
+    [Server]<br>
+    ・Network Trace ・Kerberos ・Netlogon<br>
+    <br>
+</h5>
+
+
+
+
+
+
