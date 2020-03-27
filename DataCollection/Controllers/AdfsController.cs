@@ -32,7 +32,11 @@ namespace DataCollection.Controllers
         {
             return View(adfsModel);
         }
-        
+
+        public IActionResult WapReconfig()
+        {
+            return View();
+        }
 
     }
 }

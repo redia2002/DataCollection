@@ -65,8 +65,13 @@
         </tr>
     </table>
     <br>
-    <br>
     <input type="submit" formaction=@Url.Action("Process") value="WE ARE REDS!!!" class="adfsbutton">
+    <br>
+    <br>
+    <h4>
+        @Html.ActionLink("WAP の再構成に失敗する場合に取得する資料", "WapReconfig", "Adfs")
+    </h4>
+    <br>
     <h5>@Html.ActionLink("Back to Top", "Index", "DataCollection")</h5>
 }
 
