@@ -676,8 +676,7 @@
                 <h5>&nbsp;&nbsp;&nbsp;&nbsp;Set-AdfsProperties -AuditLevel Verbose</h5>
                 <br>
             }
-
-            if (Model.cliFiddler is true && Model.tgtAdfs is true && Model.tgtWap is false)
+            else if (Model.cliFiddler is true && Model.tgtAdfs is true && Model.tgtWap is false)
             {
                 i_prepare++;
                 if (!Model.os.Equals(Constants.Adfs.OsWs12r2))
@@ -698,6 +697,10 @@
                 <h5>@i_prepare. 続けて以下のコマンドを実行します。 </h5>
                 <br>
                 <h5>&nbsp;&nbsp;&nbsp;&nbsp;Set-AdfsProperties -ExtendedProtectionTokenCheck None</h5>
+                <br>
+            }
+            else
+            {
                 <br>
             }
 
@@ -1060,7 +1063,7 @@
                 .\getadfslogscript.ps1<br>
                 <br>
                 ※ スクリプトの実行が許可されていない (Restricted) 場合は、下記コマンドを利用してスクリプトを実行することが可能です。<br>
-                Powershell.exe -ExecutionPolicy RemoteSigned -File .\getadfslogscript.ps1<br>
+                Powershell.exe -ExecutionPolicy Bypass -File .\getadfslogscript.ps1<br>
                 <br>
                 5. PowerShell 実行カレント フォルダー上に [実行日時]_hostname でフォルダーが作成され、その配下に各種ログが出力されます。<br>
                 ※ 構成によってはエラーが返ってくる場合もございますが、無視してください。<br>
