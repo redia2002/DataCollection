@@ -10,10 +10,17 @@
 <br>
 <h4>[資料採取]</h4>
 <h4>
+・シンプル版 (dsregcmd コマンド結果や、イベントログなどを取得します。通信のトレースは含みません。)
+</h4>
+<h4>
     @Html.ActionLink("Pattern1: Run Automatic-Device-Join Task manually", "RunTask", "DsReg")
 </h4>
 <h4>
     @Html.ActionLink("Pattern2: Lock/Unlock", "LockUnlock", "DsReg")
+</h4>
+<br>
+<h4>
+・詳細版 (シンプル版で取得される情報に加え、Internet Client シナリオトレースや WAM トレースを含みます。)
 </h4>
 <h4>
     @Html.ActionLink("Pattern3: Run Automatic-Device-Join Task manually (Detail)", "RunTaskDetail", "DsReg")
