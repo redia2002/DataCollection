@@ -676,7 +676,7 @@
                 <h5>&nbsp;&nbsp;&nbsp;&nbsp;Set-AdfsProperties -AuditLevel Verbose</h5>
                 <br>
             }
-            else if (Model.cliFiddler is true && Model.tgtAdfs is true && Model.tgtWap is false)
+            if (Model.cliFiddler is true && Model.tgtAdfs is true && Model.tgtWap is false)
             {
                 i_prepare++;
                 if (!Model.os.Equals(Constants.Adfs.OsWs12r2))
