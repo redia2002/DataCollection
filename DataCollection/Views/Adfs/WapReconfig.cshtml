@@ -251,7 +251,7 @@
     .\getadfslogscript.ps1<br>
     <br>
     ※ スクリプトの実行が許可されていない (Restricted) 場合は、下記コマンドを利用してスクリプトを実行することが可能です。<br>
-    Powershell.exe -ExecutionPolicy RemoteSigned -File .\getadfslogscript.ps1<br>
+    Powershell.exe -ExecutionPolicy Bypass -File .\getadfslogscript.ps1<br>
     <br>
     5. PowerShell 実行カレント フォルダー上に [実行日時]_hostname でフォルダーが作成され、その配下に各種ログが出力されます。<br>
     ※ 構成によってはエラーが返ってくる場合もございますが、無視してください。<br>
